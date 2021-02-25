@@ -1,16 +1,15 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Admin extends Model
+class ProductDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'phone_number', 'email', 'password', 'first_name', 'last_name', 'role'
-    ];
-
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
 }

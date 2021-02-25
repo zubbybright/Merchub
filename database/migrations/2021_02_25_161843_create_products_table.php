@@ -19,11 +19,10 @@ class CreateProductsTable extends Migration
             $table->decimal('price', $precision = 8, $scale = 2);
             $table->enum('availability', ['in stock', 'sold out'])->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('product_details_id');
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('product_details_id')->references('id')->on('product_details');
+    
         });
     }
 
