@@ -24,12 +24,12 @@ class ProductDetailFactory extends Factory
     public function definition()
     {
         return [
-            'description' => $this->faker->text,
+            'description' => $this->faker->sentence(),
             'manufacturer' => $this->faker->name,
             'expiry_date' => now(),
-            'nafdac_reg_no' => $this->faker->randomDigit,
+            'nafdac_reg_no' => $this->faker->randomNumber,
             
-            'product_id' =>  Product::factory()->product_details()
+            'product_id' =>  Product::factory()
         ];
     }
 }

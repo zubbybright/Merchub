@@ -24,29 +24,12 @@ class ProductFactory extends Factory
     {
         return [
             //
-            'name' => $this->faker->text,
-            'price' => $this->faker->randomDigit,
-            'availability' => now(),
-
-            'category_id' =>  Category::factory()->product()
+            'name' => $this->faker->sentence(),
+            'price' => $this->faker->randomFloat,
+            'category_id' =>  Category::factory(),
+            "availability" =>  $this->faker->randomElement(['in stock','sold out']),
         ];
     }
 
-    public function in_stock()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'availability' => 'in_stock',
-            ];
-        });
-    }
 
-    public function sold_out()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'availability' => 'sold_out',
-            ];
-        });
-    }
 }

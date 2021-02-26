@@ -24,9 +24,10 @@ class AdminFactory extends Factory
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
+            'username' => $this->faker->username,
             'email' => $this->faker->unique()->safeEmail,
             'phone_number' => $this->faker->unique()->phoneNumber(),
-            'role' => $this->faker->text,
+            'role' => $this->faker->word(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ];
     }
