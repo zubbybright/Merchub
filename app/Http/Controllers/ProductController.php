@@ -6,13 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Image;
+use App\Models\ProductImage;
 use App\Models\ProductDetail;
 use Carbon\Carbon;
 
 class ProductController extends BaseController
 {   
-    private $catId;
 
     public function upload(Request $request){
         //A product can be uploaded
@@ -32,28 +31,28 @@ class ProductController extends BaseController
         ]);
 
         //CREATE CATEGORY: 
-        $category = new Category;   
         
         //if the category exists, get Id. Else, insert:
-        $catExists = $category->where('name',$data['category'])->first();
-        
+        $catExists = Category::where('name',$data['category'])->first();
+        $catId = "";
         if ($catExists !== null)
         {
-            $this->catId = $catExists->id;
+            $catId = $catExists->id;
         }
         else
-        {
+        {   
+            $category = new Category;
             $category->name = $data['category'];
             $category->save();
-            $this->catId = $category->id;
+            $catId = $category->id;
         }
         
         //CREATE THE PRODUCT:
         $product = Product::create([
             'name' => $data['name'],
             'price'=> $data['price'],
-            'availability'=>'in stock',
-            'category_id' => $this->catId,
+            'availability'=>'IN_STOCK',
+            'category_id' => $catId,
         ]);
         //CREATE OTHER PRODUCT DETAILS:
         $product
@@ -67,30 +66,17 @@ class ProductController extends BaseController
         ]);
         
         //UPLOAD IMAGES
-        $image = new Image;
+        $image = new ProductImage;
         if ($request->hasFile('image1')) {
-            $pic = $request->file('image1');
-            $name = "Prod ".$product->id." (A)".".".$pic->guessExtension();
-            $destinationPath = public_path('image1');
-            $image->image1 = $name;
-            $image->product_id = $product->id;
-            $pic->move($destinationPath, $name);
+            $this->uploadImage($request, 'image1', $image, $product);
             $image->save();
         }
         if ($request->hasFile('image2')) {
-            $pic = $request->file('image2');
-            $name = "Prod ".$product->id." (B)".".".$pic->guessExtension();
-            $destinationPath = public_path('image2');
-            $image->image2 = $name;
-            $pic->move($destinationPath, $name);
+            $this->uploadImage($request, 'image2', $image, $product);
             $image->save();
         }
         if ($request->hasFile('image3')) {
-            $pic = $request->file('image3');
-            $name = "Prod ".$product->id." (C)".".".$pic->guessExtension();
-            $destinationPath = public_path('image3');
-            $image->image3 = $name;
-            $pic->move($destinationPath, $name);
+            $this->uploadImage($request, 'image3', $image, $product);
             $image->save();
         }
 
@@ -103,6 +89,19 @@ class ProductController extends BaseController
         return $this->sendResponse($info, "Product Uploaded.");
     }
 
-    
+    private function uploadImage(Request $request,$imgFieldName, $image, $product){
+        $pic = $request->file($imgFieldName);
+        $name = "Prod ".$product->id." ".$imgFieldName.".".$pic->guessExtension();
+        $destinationPath = public_path($imgFieldName);
+        $image->$imgFieldName = $name;
+        $image->product_id = $product->id;
+        $pic->move($destinationPath, $name);
+    }
+
+    public function delete($id){
+
+        $record = Product::where('id', $id)->delete();
+        return $this->sendResponse($record, "Product deleted");
+    }
 
 }

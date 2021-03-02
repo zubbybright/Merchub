@@ -27,7 +27,7 @@ class ProductFactory extends Factory
             'name' => $this->faker->sentence(),
             'price' => $this->faker->randomFloat,
             'category_id' =>  Category::factory(),
-            "availability" =>  $this->faker->randomElement(['in stock','sold out']),
+            "availability" =>  $this->faker->randomElement(['IN_STOCK','SOLD_OUT']),
         ];
     }
 
