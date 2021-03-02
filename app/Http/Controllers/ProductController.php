@@ -67,18 +67,16 @@ class ProductController extends BaseController
         
         //UPLOAD IMAGES
         $image = new ProductImage;
-        if ($request->hasFile('image1')) {
-            $this->uploadImage($request, 'image1', $image, $product);
-            $image->save();
-        }
-        if ($request->hasFile('image2')) {
-            $this->uploadImage($request, 'image2', $image, $product);
-            $image->save();
-        }
-        if ($request->hasFile('image3')) {
-            $this->uploadImage($request, 'image3', $image, $product);
-            $image->save();
-        }
+        $fileFieldNames = ['image1', 'image2', 'image3'];
+        
+        foreach ($fileFieldNames as $field){
+            if ($request->hasFile($field))
+            {
+                $this->uploadImage($request, $field, $image, $product);
+                $image->save();
+            }
+           
+        };
 
         $info  = [
             'product' => $product,
