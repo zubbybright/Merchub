@@ -97,9 +97,44 @@ class ProductController extends BaseController
     }
 
     public function delete($id){
+        if((Product::find($id))==null){
+            return $this->sendError('product does not exist', 'product does not exist');
+        }
+        $deletedRecord = Product::where('id', $id)->delete();
+        return $this->sendResponse("Product deleted", "Product deleted");
+    }
 
-        $record = Product::where('id', $id)->delete();
-        return $this->sendResponse($record, "Product deleted");
+    public function fetchProduct($id){
+        if((Product::find($id))==null){
+            return $this->sendError('product does not exist', 'product does not exist');
+        }
+        $product = Product::where('id', $id)->first();
+        $detail = $product->detail;
+        $images = $product->images;
+
+        $info = [
+            'product'=> $product,
+            'detail'=> $detail,
+            'images'=>$images
+        ];
+        return $this->sendResponse($info, "Product found");
+    }
+
+    public function fetchProductByCategory(string $category){
+        if((Category::where('name',$category))==null){
+            return $this->sendError('Category does not exist', 'Category does not exist');
+        }
+        $catId = Category::select('id')->where('name', $category)->first();
+        $products = Product::where('category_id', $catId)->get();
+        $details = $products->detail;
+        $images = $products->images;
+
+        $info = [
+            'product'=> $products,
+            'detail'=> $details,
+            'images'=>$images
+        ];
+        return $this->sendResponse($info, "Products found");
     }
 
 }

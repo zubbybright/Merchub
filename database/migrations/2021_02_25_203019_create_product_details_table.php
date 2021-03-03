@@ -15,14 +15,13 @@ class CreateProductDetailsTable extends Migration
     {
         Schema::create('product_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('description');
             $table->string('manufacturer')->nullable();
             $table->string('nafdac_reg_no')->nullable();
             $table->date('expiry_date')->nullable();
             $table->timestamps();
 
-            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

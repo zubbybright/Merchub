@@ -18,10 +18,8 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->decimal('price',  8, 2);
             $table->enum('availability', ['IN_STOCK', 'SOLD_OUT'])->nullable();
-            $table->unsignedBigInteger('category_id');
+            $table->foreignId('category_id')->constrained();
             $table->timestamps();
-
-            $table->foreign('category_id')->references('id')->on('categories');
     
         });
     }
