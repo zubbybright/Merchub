@@ -19,6 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('product/upload', 'ProductController@upload');
-Route::post('product/delete/{id}', 'ProductController@delete');
+Route::post('product/delete/{id}', 'ProductController@deleteProduct');
 Route::get('product/fetch/{id}', 'ProductController@fetchProduct');
-Route::get('products/fetch/{category}', 'ProductController@fetchProductByCategory');
+Route::get('product/categories', 'ProductController@fetchCategories');
+Route::get('category/products/{cat}', 'ProductController@categoryProducts');
+Route::post('product/edit/{id}', 'ProductController@edit');
+Route::post('delete/image/{id}', 'ProductController@deleteImage');
