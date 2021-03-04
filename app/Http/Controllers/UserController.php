@@ -15,7 +15,7 @@ class UserController extends BaseController
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
-            $token = $request->user()->createToken($request->username);
+            $token = $request->user()->createToken('login');
             return $this->respondWithToken($token->plainTextToken);
         }
     }
@@ -45,7 +45,7 @@ class UserController extends BaseController
             'role'=>$data['role']
         ]);
 
-        $token = $user->createToken($request->username);
+        $token = $user->createToken('register');
         $info =[
             'access_token'=> $token->plainTextToken,
             'user' => $user
