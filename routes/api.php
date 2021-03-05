@@ -18,8 +18,8 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {
-    Route::post('login', 'UserController@login');
-    Route::post('register', 'UserController@register');
+    Route::post('login', 'AdminController@login');
+    Route::post('register', 'AdminController@register');
 });
 
 Route::post('product/upload', 'ProductController@upload');
