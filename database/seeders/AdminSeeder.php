@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Admin;
+
 class AdminSeeder extends Seeder
 {
     /**
@@ -15,7 +16,7 @@ class AdminSeeder extends Seeder
     {
         //
         Admin::factory()
-            ->count(5)
-            ->create();
+        ->count(5)
+        ->create();
     }
 }
