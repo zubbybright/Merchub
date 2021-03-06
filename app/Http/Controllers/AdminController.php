@@ -28,12 +28,9 @@ class AdminController extends BaseController
             'username' => ['required', 'string','unique:admins', 'max:255'],
             'phone_number'=>['required', 'string','unique:admins', 'max:20'],
             'email'=>['required','email', 'unique:admins'],
-            'password'=>['required', 'string', 'max:100'],
+            'password'=>['required', 'string', 'max:100', 'confirmed'],
             'role'=>['nullable', 'string', 'max:100'],
         ]);
-
-        //generate token
-       
 
         //create record
         $admin = Admin::create([
@@ -46,6 +43,7 @@ class AdminController extends BaseController
             'role'=>$data['role']
         ]);
 
+        //generate token 
         $token = $admin->createToken('register');
         $info =[
             'access_token'=> $token->plainTextToken,
