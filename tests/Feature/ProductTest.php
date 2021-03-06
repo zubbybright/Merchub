@@ -8,6 +8,8 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Database\Seeders\ProductSeeder;
+use App\Models\Product;
 
 class ProductTest extends TestCase
 {   
@@ -19,7 +21,10 @@ class ProductTest extends TestCase
      */
 
     const UPLOAD_URL = '/api/product/upload';
-    protected $img1, $img2, $img3;
+    const DELETE_URL = '/api/product/delete/';
+    const EDIT_URL = '/api/product/edit/';
+
+    protected $img1, $img2, $img3, $product;
 
     protected function setUp(): void{
         parent::setUp();
@@ -72,7 +77,7 @@ class ProductTest extends TestCase
         ]);
     }
 
-    public function test_image_fields_must_contain_image_files(){
+    public function test_image_fields_must_contain_image_files_during_upload(){
         $file = UploadedFile::fake()->image('file.mp3');
         
         $response = $this->postjson(self::UPLOAD_URL,[
@@ -97,7 +102,7 @@ class ProductTest extends TestCase
 
     }
 
-    public function test_text_inputs_must_be_in_string_format(){
+    public function test_upload_text_inputs_must_be_in_string_format(){
         $response = $this->postjson(self::UPLOAD_URL,[
             'category'=>102000300,
             'name' => 9484949900004,
@@ -112,5 +117,44 @@ class ProductTest extends TestCase
         ]);
         $response->assertStatus(422);
     }
-   
+    
+    public function test_a_product_can_be_deleted(){
+        $this->seed(ProductSeeder::class);
+        $this->product = Product::first();
+
+        $response = $this->post(self::DELETE_URL.$this->product->id);
+        $response->assertStatus(200);
+    }
+
+    public function test_product_must_exist_to_be_deleted(){
+        $this->seed(ProductSeeder::class);
+        $this->product = Product::first();
+
+        $response = $this->post(self::DELETE_URL.'15');
+        $response->assertStatus(400);
+    }
+
+    public function test_a_product_can_be_edited(){
+        $this->seed(ProductSeeder::class);
+        $this->product = Product::first();
+        $file1 = UploadedFile::fake()->image('file1.jpg');
+        // $file2 = UploadedFile::fake()->image('file2.jpg');
+        // $file3 = UploadedFile::fake()->image('file3.jpg');
+
+        $response = $this->postjson(self::EDIT_URL.$this->product->id,[
+            'category'=>'Cosmetics',
+            'name' => 'Mac eye shadow',
+            'price' => '4500',
+            'description'=>'very good for you',
+            'manufacturer'=>'Mac cosmetics',
+            'nafdac_no'=>'09-39495',
+            'expiry'=>'23-09-23',
+            'image1' => $file1,
+            'image2' => ' ',
+            'image3' => ' '
+        ]);
+
+        $response->dump();
+        $response->assertStatus(200);
+    }
 }

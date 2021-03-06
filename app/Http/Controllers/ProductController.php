@@ -185,6 +185,9 @@ class ProductController extends BaseController
             }
 
             $product = Product::where('id',$id)->first();
+            if($product==null){
+                return $this->sendError('product does not exist','product does not exist');
+            }
             $product->name = $data['name'];
             $product->price = $data['price'];
             $product->category_id = $catId;
