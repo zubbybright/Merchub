@@ -136,6 +136,10 @@ class ProductController extends BaseController
     public function categoryProducts($cat){
         $category = Category::where('name', $cat)->first();
 
+        if($category==null){
+            return $this->sendError('Category does not exist', 'Category does not exist');
+        }
+        
         $products = Product::where('category_id', $category->id)->get();
         
         return $this->sendResponse($products, "All $cat products");

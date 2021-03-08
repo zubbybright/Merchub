@@ -9,7 +9,10 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Database\Seeders\ProductSeeder;
+use Database\Seeders\CategorySeeder;
 use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\Category;
 
 class ProductTest extends TestCase
 {   
@@ -24,10 +27,15 @@ class ProductTest extends TestCase
     const DELETE_URL = '/api/product/delete/';
     const EDIT_URL = '/api/product/edit/';
 
-    protected $img1, $img2, $img3, $product;
+    protected $img1, $img2, $img3, $product, $category;
 
     protected function setUp(): void{
         parent::setUp();
+        $this->seed(ProductSeeder::class);
+        $this->seed(CategorySeeder::class);
+        $this->product = Product::first();
+        $this->category = Category::first();
+
         Storage::fake('images');
         $this->img1 = UploadedFile::fake()->image('image1.jpg');
         $this->img2 = UploadedFile::fake()->image('image2.jpg');
@@ -119,28 +127,18 @@ class ProductTest extends TestCase
     }
     
     public function test_a_product_can_be_deleted(){
-        $this->seed(ProductSeeder::class);
-        $this->product = Product::first();
-
         $response = $this->post(self::DELETE_URL.$this->product->id);
         $response->assertStatus(200);
     }
 
     public function test_product_must_exist_to_be_deleted(){
-        $this->seed(ProductSeeder::class);
-        $this->product = Product::first();
-
         $response = $this->post(self::DELETE_URL.'15');
         $response->assertStatus(400);
     }
 
     public function test_a_product_can_be_edited(){
-        $this->seed(ProductSeeder::class);
-        $this->product = Product::first();
+       
         $file1 = UploadedFile::fake()->image('file1.jpg');
-        // $file2 = UploadedFile::fake()->image('file2.jpg');
-        // $file3 = UploadedFile::fake()->image('file3.jpg');
-
         $response = $this->postjson(self::EDIT_URL.$this->product->id,[
             'category'=>'Cosmetics',
             'name' => 'Mac eye shadow',
@@ -154,7 +152,50 @@ class ProductTest extends TestCase
             'image3' => ' '
         ]);
 
-        $response->dump();
         $response->assertStatus(200);
+    }
+
+    public function test_a_product_can_be_fetched_by_id(){
+        $response = $this->get('/api/product/fetch/'.$this->product->id);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_a_product_cannot_be_fetched_with_wrong_id(){
+        $response = $this->get('/api/product/fetch/100');
+        $response->assertStatus(400);
+    }
+
+    public function test_products_can_be_fectched_by_category(){
+
+        $response = $this->get('/api/category/products/'.$this->category->name);
+        $response->assertStatus(200);
+    }
+
+    public function test_products_cannot_be_fectched_by_wrong_category(){
+
+        $response = $this->get('/api/category/products/category');
+        $response->assertStatus(400);
+    }
+
+    public function test_all_categories_can_be_fetched(){
+        $response = $this->get('/api/product/categories');
+        $response->assertStatus(200);
+    }
+    public function test_all_products_can_be_fetched(){
+        $response = $this->get('/api/products/all');
+        $response->assertStatus(200);
+    }
+
+    public function test_an_image_can_be_deleted(){
+
+        $imageId = ProductImage::where('product_id',$this->product->id)->first();
+        $response = $this->post('/api/delete/image/'.$imageId->id);
+        $response->assertStatus(200);
+    }
+
+    public function test_an_image_must_first_exist_to_be_deleted(){
+        $response = $this->post('/api/delete/image/50');
+        $response->assertStatus(400);
     }
 }
