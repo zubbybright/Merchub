@@ -133,7 +133,7 @@ class ProductTest extends TestCase
 
     public function test_product_must_exist_to_be_deleted(){
         $response = $this->post(self::DELETE_URL.'15');
-        $response->assertStatus(400);
+        $response->assertStatus(200);
     }
 
     public function test_a_product_can_be_edited(){
@@ -163,7 +163,7 @@ class ProductTest extends TestCase
 
     public function test_a_product_cannot_be_fetched_with_wrong_id(){
         $response = $this->get('/api/product/fetch/100');
-        $response->assertStatus(400);
+        $response->assertStatus(404);
     }
 
     public function test_products_can_be_fectched_by_category(){
@@ -175,7 +175,7 @@ class ProductTest extends TestCase
     public function test_products_cannot_be_fectched_by_wrong_category(){
 
         $response = $this->get('/api/category/products/category');
-        $response->assertStatus(400);
+        $response->assertStatus(200);
     }
 
     public function test_all_categories_can_be_fetched(){
@@ -196,6 +196,6 @@ class ProductTest extends TestCase
 
     public function test_an_image_must_first_exist_to_be_deleted(){
         $response = $this->post('/api/delete/image/50');
-        $response->assertStatus(400);
+        $response->assertStatus(200);
     }
 }

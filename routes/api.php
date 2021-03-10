@@ -27,6 +27,6 @@ Route::post('product/delete/{id}', 'ProductController@deleteProduct');
 Route::get('product/fetch/{id}', 'ProductController@fetchProduct');
 Route::get('product/categories', 'ProductController@fetchCategories');
 Route::get('products/all', 'ProductController@fetchAllProducts');
-Route::get('category/products/{cat}', 'ProductController@categoryProducts');
+Route::get('category/products/{id}', 'ProductController@categoryProducts');
 Route::post('product/edit/{id}', 'ProductController@edit');
 Route::post('delete/image/{id}', 'ProductController@deleteImage');

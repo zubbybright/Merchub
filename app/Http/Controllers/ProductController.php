@@ -98,26 +98,21 @@ class ProductController extends BaseController
 
     //Delete a product
     public function deleteProduct($id){
-        if((Product::find($id))==null){
-            return $this->sendError('product does not exist', 'product does not exist');
-        }
-        $deletedRecord = Product::where('id', $id)->delete();
+        Product::where('id', $id)->delete();
         return $this->sendResponse("Product deleted", "Product deleted");
     }
 
     //Fetch specific product
     public function fetchProduct($id){
-        if((Product::find($id))==null){
-            return $this->sendError('product does not exist', 'product does not exist');
+        $product = Product::find($id);
+        if($product==null){
+            return $this->sendError('product does not exist', 'product does not exist', 404);
         }
-        $product = Product::where('id', $id)->first();
-        $detail = $product->detail;
-        $images = $product->images;
-
+        
         $info = [
             'product'=> $product,
-            'detail'=> $detail,
-            'images'=>$images
+            'detail'=> $product->detail,
+            'images'=> $product->images
         ];
         return $this->sendResponse($info, "Product found");
     }
@@ -125,33 +120,23 @@ class ProductController extends BaseController
     //Fetch all categories
     public function fetchCategories(){
         $categories = Category::all();
-        if($categories==null){
-            return $this->sendError('No categories yet', 'No categories yet');
-        }
-       
         return $this->sendResponse($categories, "All categories");
     }
 
     //get products belonging to a category
-    public function categoryProducts($cat){
-        $category = Category::where('name', $cat)->first();
-
-        if($category==null){
-            return $this->sendError('Category does not exist', 'Category does not exist');
-        }
+    public function categoryProducts($catId){
+        $category = Category::find($catId);
+        $products = [];
+        if($category != null){
+            $products = $category->products;
+        }        
         
-        $products = Product::where('category_id', $category->id)->get();
-        
-        return $this->sendResponse($products, "All $cat products");
+        return $this->sendResponse($products, "All category products");
     }
 
     //get all products
     public function fetchAllProducts(){
         $products = Product::all();
-        if($products==null){
-            return $this->sendError('No products yet', 'No products yet');
-        }
-       
         return $this->sendResponse($products, "All products");
     } 
 
@@ -224,10 +209,7 @@ class ProductController extends BaseController
 
     //delete an image
     public function deleteImage($id){
-        if((ProductImage::find($id))==null){
-            return $this->sendError('image does not exist', 'image does not exist');
-        }
-        $deletedImage = ProductImage::where('id', $id)->delete();
+        ProductImage::where('id', $id)->delete();
         return $this->sendResponse("Image deleted", "Image deleted");
     }
 
