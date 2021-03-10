@@ -156,34 +156,30 @@ class ProductTest extends TestCase
     }
 
     public function test_a_product_can_be_fetched_by_id(){
-        $response = $this->get('/api/product/fetch/'.$this->product->id);
+        $response = $this->get('/api/product/'.$this->product->id);
 
         $response->assertStatus(200);
     }
 
     public function test_a_product_cannot_be_fetched_with_wrong_id(){
-        $response = $this->get('/api/product/fetch/100');
+        $response = $this->get('/api/product/100');
         $response->assertStatus(404);
     }
 
     public function test_products_can_be_fectched_by_category(){
 
-        $response = $this->get('/api/category/products/'.$this->category->name);
+        $response = $this->get('/api/products/'.$this->category->id);
         $response->assertStatus(200);
     }
 
     public function test_products_cannot_be_fectched_by_wrong_category(){
 
-        $response = $this->get('/api/category/products/category');
+        $response = $this->get('/api/products/50');
         $response->assertStatus(200);
     }
 
     public function test_all_categories_can_be_fetched(){
-        $response = $this->get('/api/product/categories');
-        $response->assertStatus(200);
-    }
-    public function test_all_products_can_be_fetched(){
-        $response = $this->get('/api/products/all');
+        $response = $this->get('/api/categories');
         $response->assertStatus(200);
     }
 

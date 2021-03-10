@@ -117,26 +117,21 @@ class ProductController extends BaseController
         return $this->sendResponse($info, "Product found");
     }
 
-    //Fetch all categories
-    public function fetchCategories(){
-        $categories = Category::all();
-        return $this->sendResponse($categories, "All categories");
-    }
-
-    //get products belonging to a category
-    public function categoryProducts($catId){
-        $category = Category::find($catId);
-        $products = [];
-        if($category != null){
-            $products = $category->products;
-        }        
-        
-        return $this->sendResponse($products, "All category products");
-    }
+ 
 
     //get all products
-    public function fetchAllProducts(){
-        $products = Product::all();
+    public function get($catId){
+        //find if category query param is passed
+        $category = Category::find($catId);
+        $products = []; 
+        //if passed use it to filter products
+        if($category != null){
+            $products = [
+                'products'=> $category->products,
+                'detail'=>$category->productDetail,
+                'images'=>$category->productImages
+            ];
+        }
         return $this->sendResponse($products, "All products");
     } 
 

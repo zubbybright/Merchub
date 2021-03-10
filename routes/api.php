@@ -24,9 +24,8 @@ Route::group([
 
 Route::post('product/upload', 'ProductController@upload');
 Route::post('product/delete/{id}', 'ProductController@deleteProduct');
-Route::get('product/fetch/{id}', 'ProductController@fetchProduct');
-Route::get('product/categories', 'ProductController@fetchCategories');
-Route::get('products/all', 'ProductController@fetchAllProducts');
-Route::get('category/products/{id}', 'ProductController@categoryProducts');
+Route::get('product/{id}', 'ProductController@fetchProduct');
+Route::get('categories', 'CategoryController@fetchCategories');
+Route::get('products/{catId}', 'ProductController@get');
 Route::post('product/edit/{id}', 'ProductController@edit');
 Route::post('delete/image/{id}', 'ProductController@deleteImage');

@@ -13,8 +13,14 @@ class Category extends Model
         'name'
     ];
 
-    public function product(){
+    public function products(){
         return $this->hasMany(Product::class);
+    }
+    public function productDetail(){
+        return $this->hasManyThrough(ProductDetail::class, Product::Class);
+    }
+    public function productImages(){
+        return $this->hasManyThrough(ProductImage::class, Product::class);
     }
 
 }
