@@ -1,0 +1,40 @@
+name: Staging Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+    - name: Prepare environment
+      run: |
+        touch database/database.sqlite
+        composer dump-autoload
+        php artisan optimize --env=testing
+    - name: Test Migration and Seeders
+      run: |
+        php artisan migrate --seed --env=testing
+        php artisan migrate:rollback --env=testing
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      run: php artisan test
+  heroku-deploy:
+    needs: laravel-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "merchub-api"
+          heroku_email: "zubbybrightson@gmail.com"
