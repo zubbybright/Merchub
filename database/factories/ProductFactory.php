@@ -25,7 +25,7 @@ class ProductFactory extends Factory
         return [
             //
             'name' => $this->faker->sentence(),
-            'price' => $this->faker->randomFloat,
+            'price' => $this->faker->randomFloat($nbMaxDecimals = 5, $min = 0, $max = 20),
             'category_id' =>  Category::factory(),
             "availability" =>  $this->faker->randomElement(['IN_STOCK','SOLD_OUT']),
         ];
