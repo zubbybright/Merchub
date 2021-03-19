@@ -16,6 +16,8 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('in_stock_count');
+            $table->integer('sold_out_count');
             $table->timestamps();
         });
     }

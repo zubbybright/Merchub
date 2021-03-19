@@ -38,11 +38,17 @@ class ProductController extends BaseController
         if ($catExists !== null)
         {
             $catId = $catExists->id;
+            $category = Category::find($catId);
+            $category->in_stock_count += 1;
+            $category->sold_out_count = 0;
+            $category->save();
         }
         else
         {   
             $category = new Category;
             $category->name = $data['category'];
+            $category->in_stock_count += 1;
+            $category->sold_out_count = 0;
             $category->save();
             $catId = $category->id;
         }

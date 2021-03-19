@@ -23,6 +23,8 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
+            'in_stock_count' => $this->faker->randomDigit,
+            'sold_out_count' => $this->faker->randomDigit,
         ];
     }
 }
