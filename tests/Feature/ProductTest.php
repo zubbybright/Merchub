@@ -151,7 +151,7 @@ class ProductTest extends TestCase
             'image2' => ' ',
             'image3' => ' '
         ]);
-
+      
         $response->assertStatus(200);
     }
 

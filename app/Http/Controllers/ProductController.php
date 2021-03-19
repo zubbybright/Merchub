@@ -170,6 +170,8 @@ class ProductController extends BaseController
             {   
                 $category = new Category;
                 $category->name = $data['category'];
+                $category->in_stock_count += 1;
+                $category->sold_out_count = 0;
                 $category->save();
                 $catId = $category->id;
             }
