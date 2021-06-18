@@ -56,8 +56,7 @@ class ProductTest extends TestCase
             'image2' => $this->img2,
             'image3' => $this->img3
         ]);
-        $response->assertStatus(200);
-        
+        $response->assertStatus(200); 
     }
 
     public function test_compulsory_fileds_must_be_included_in_upload(){
