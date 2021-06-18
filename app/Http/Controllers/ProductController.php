@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\ProductDetail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends BaseController
 {   
@@ -214,6 +215,19 @@ class ProductController extends BaseController
     public function deleteImage($id){
         ProductImage::where('id', $id)->delete();
         return $this->sendResponse("Image deleted", "Image deleted");
+    }
+
+    //get featured categories and products
+
+    public function featured(){
+        //- get 5 random categories 
+        //- Get products of selected images
+		//- get the images of the products
+       $data = Category::with('products')
+       ->with('productImages')
+       ->inRandomOrder()
+       ->take(5)->get();
+        return $this->sendResponse($data, "Featured Categories");
     }
 
 }
