@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('price',  8, 5);
+            $table->double('price',  8, 5);
             $table->enum('availability', ['IN_STOCK', 'SOLD_OUT'])->nullable();
             $table->foreignId('category_id')->constrained();
             $table->timestamps();

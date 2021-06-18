@@ -22,7 +22,7 @@ Route::group([
     Route::post('register', 'AdminController@register');
 });
 
-Route::post('product/upload', 'ProductController@upload');
+Route::post('product/upload', 'ProductController@upload')->middleware('auth:api');
 Route::post('product/delete/{id}', 'ProductController@deleteProduct');
 Route::get('product/{id}', 'ProductController@fetchProduct');
 Route::get('categories', 'CategoryController@fetchCategories');
