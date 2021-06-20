@@ -30,4 +30,4 @@ Route::get('products/{catId}', 'ProductController@get');
 Route::post('product/edit/{id}', 'ProductController@edit');
 Route::post('delete/image/{id}', 'ProductController@deleteImage');
 Route::get('featured/products', 'ProductController@featured');
-Route::get('product/category/{catId}', 'productController@productCategory');
+Route::get('product/category/{catId}', 'ProductController@productCategory');
