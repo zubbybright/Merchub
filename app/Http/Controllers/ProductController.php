@@ -229,5 +229,14 @@ class ProductController extends BaseController
        ->take(5)->get();
         return $this->sendResponse($data, "Featured Categories");
     }
+    //get the category of a specific product
 
+    public function productCategory($catId){
+        $category = Category::find($catId);
+        
+        if($category != null){
+            return $this->sendResponse($category, "Specific Product Category");
+        }
+        return $this->sendResponse("Such category does not exist", "Such category does not exist");
+    }
 }
